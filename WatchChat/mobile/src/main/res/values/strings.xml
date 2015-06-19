@@ -3,4 +3,21 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Sign In Activity -->
+    <string name="title_activity_sign_in">Sign In</string>
+    <string name="error_email_field_required">Email is required</string>
+    <string name="error_email_field_invalid">Email invalid</string>
+    <string name="error_password_field_required">Password is required</string>
+    <string name="error_password_field_invalid">Password invalid</string>
+
+    <!-- Create Group Activity -->
+    <string name="title_activity_create_group">Create Group</string>
+    <string name="error_group_name_required">Group name required</string>
+    <string name="error_group_name_invalid">Group name is invalid</string>
+    <string name="error_group_name_in_use">Group name is already in use</string>
+
+    <!-- Group Preferences Activity -->
+    <string name="title_activity_group_preferences">Group Preferences</string>
+
 </resources>
