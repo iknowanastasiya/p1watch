@@ -1,37 +1,78 @@
 package gatech.cs3300.watchchat;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
-public class GroupPreferencesActivity extends ActionBarActivity {
+public class GroupPreferencesActivity extends ActionBarActivity implements AddGroupMemberDialog.AddGroupMemberDialogListener, ConfirmLeaveGroupDialog.ConfirmLeaveGroupDialogListener {
+
+    // Views
+    private Button mGroupAddMemberButton;
+    private ListView mGroupMembersListView;
+    private Button mLeaveGroupButton;
+    private ProgressBar mLeaveGroupActivityIndicator;
+
+    // Adapter
+    private String[] mGroupMemberNames;
+    private GroupMembersAdapter mGroupMemberAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_preferences);
+
+        mGroupAddMemberButton = (Button) findViewById(R.id.group_add_member_button);
+        mGroupMembersListView = (ListView) findViewById(R.id.group_members_list_view);
+        mLeaveGroupButton = (Button) findViewById(R.id.leave_group_button);
+        mLeaveGroupActivityIndicator = (ProgressBar) findViewById(R.id.leave_group_activity_indicator);
+
+        mGroupAddMemberButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addMemberDialog();
+            }
+        });
+
+        mGroupMemberAdapter = new GroupMembersAdapter(getApplicationContext(), null);
+        mGroupMembersListView.setAdapter(mGroupMemberAdapter);
+
+        mLeaveGroupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                leaveGroupDialog();
+            }
+        });
+
+        mLeaveGroupActivityIndicator.setVisibility(View.GONE);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_group_preferences, menu);
-        return true;
+    private void refreshGroupMembers() {
+        mGroupMemberAdapter.setMemberNames(mGroupMemberNames);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    private void addMemberDialog() {
+        AddGroupMemberDialog dialog = new AddGroupMemberDialog();
+        dialog.setListener(this);
+        dialog.show(getFragmentManager(), "add_group_member_dialog");
     }
+
+    private void leaveGroupDialog() {
+        ConfirmLeaveGroupDialog dialog = new ConfirmLeaveGroupDialog();
+        dialog.setListener(this);
+        dialog.show(getFragmentManager(), "confirm_leave_group_dialog");
+    }
+
+    // Listeners
+
+    public void addGroupMemberWithName(String name) {
+        refreshGroupMembers();
+    }
+
+    public void leaveGroup() {
+
+    }
+
 }
