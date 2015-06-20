@@ -1,10 +1,14 @@
+package gatech.cs3300.watchchat;
+
 import android.app.Activity;
+import android.preference.PreferenceActivity;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -47,7 +51,7 @@ public class APIController extends Activity {
                             Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(), response,
-                            Toast.LENGTH_LONGT).show();
+                            Toast.LENGTH_LONG).show();
                 }
             }
             @Override
@@ -68,7 +72,7 @@ public class APIController extends Activity {
     // This will return a JSON list of user's usernames as Strings *//
     public ArrayList<String> getAllUsers() {
         //TODO complete
-        return userList;
+        return null;
     }
 
     //*To request information regarding an existing user, send a GET request to /users
@@ -82,7 +86,7 @@ public class APIController extends Activity {
     // This will return a JSON list of groupnames and groupIds.*//
     public ArrayList<String> getAllGroupsUserIsIn(int userId) {
         //TODO complete
-        return userGroupList;
+        return null;
     }
 
     //*To create a user, send a POST request to /users passing the parameter username.
@@ -108,26 +112,26 @@ public class APIController extends Activity {
     // so not all groups will have groupnames *//
     public ArrayList<String> getAllGroups() {
         //TODO complete
-        return groupsList;
+        return null;
     }
 
     //*Get a group's info by groupId *//
     public ArrayList<String> getAllGroupInfo() {
         //TODO complete
-        return groupInfo;
+        return null;
     }
 
     //*Get all users in a group *//
     public ArrayList<String> getAllUsersInAGroup() {
         //TODO complete
-        return groupUserList;
+        return null;
     }
 
 
     //*Get all messages in a group *//
     public ArrayList<String> getAllMessagesInAGroup() {
         //TODO complete
-        return messageList;
+        return null;
     }
 
     //*To create a group, send a POST request to /groups with the parameter groupname*//

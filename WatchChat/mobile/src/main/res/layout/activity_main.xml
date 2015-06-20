@@ -3,9 +3,56 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:background="#2196F3">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="55dp"
+        android:textSize="50dp"
+        android:textColor="@android:color/white"
+        android:text="App Chat"
+        android:textStyle="bold" />
 
+    <EditText
+        android:id="@+id/Username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@android:color/white"
+        android:textSize="30dp"
+        android:textColor="@android:color/black"
+        android:hint="Username..."
+        />
+
+    <Button
+        android:id="@+id/SignInButton"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Username"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:textColor="#2196F3"
+        android:textSize="20dp"
+        android:text="Sign In"
+        />
+
+    <Button
+        android:id="@+id/RegisterButton"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/Username"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:textColor="#2196F3"
+        android:textSize="20dp"
+        android:text="Register"
+        />
 </RelativeLayout>
