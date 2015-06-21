@@ -134,6 +134,7 @@ public class APIController extends Activity {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
                                   Throwable error) {
+                System.out.println("API user create failure handler");
                 error.printStackTrace(System.out);
             }
         });
@@ -181,10 +182,11 @@ public class APIController extends Activity {
     //*To create a group, send a POST request to /groups/create with the parameter groupname*//
     public void createGroup(String groupName) {
         System.out.println("Add group");
+        System.out.println("group name "+groupName);
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        params.put("groupName", groupName);
-        client.post(API_ROOT + "/groups/create", params, new AsyncHttpResponseHandler() {
+        params.put("groupname", groupName);
+        client.post(API_ROOT + "groups/create", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
@@ -194,6 +196,7 @@ public class APIController extends Activity {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
                                   Throwable error) {
+                System.out.println("API group create failure handler");
                 error.printStackTrace(System.out);
             }
         });
