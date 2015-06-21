@@ -32,6 +32,8 @@ public class MainActivity extends Activity {
                 attemptRegister();
             }
         });
+
+        startActivity(new Intent(this, GroupActivity.class));
     }
 
     public void attemptSignIn(){

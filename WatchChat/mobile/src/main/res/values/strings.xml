@@ -29,5 +29,6 @@
     <!--Groups Activity-->
     <string name="logout">Logout</string>
     <string name="create_group">Create Group</string>
+    <string name="title_activity_group">GroupActivity</string>
 
 </resources>
