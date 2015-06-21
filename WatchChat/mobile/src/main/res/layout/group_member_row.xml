@@ -6,6 +6,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/group_member_name" />
+        android:id="@+id/group_member_name"
+        style="@style/Base.TextAppearance.AppCompat.Title.Inverse"
+        android:text="Group Member Name"
+        android:layout_margin="10dp" />
 </LinearLayout>

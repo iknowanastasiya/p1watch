@@ -23,7 +23,7 @@ public class ConfirmLeaveGroupDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.confirm_leave_group_message)
                 // Add action buttons
-                .setPositiveButton(R.string.add_group_member, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.leave_group, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         if (mListener != null) {

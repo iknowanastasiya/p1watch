@@ -33,10 +33,6 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".SignInActivity"
-            android:label="@string/title_activity_sign_in" >
-        </activity>
-        <activity
             android:name=".CreateGroupActivity"
             android:label="@string/title_activity_create_group" >
         </activity>

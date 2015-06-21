@@ -46,6 +46,8 @@ public class AddGroupMemberDialog extends DialogFragment {
                     }
                 });
 
+        builder.setTitle(R.string.add_group_member_dialog_title);
+
         return builder.create();
     }
 
