@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
         if(TextUtils.isEmpty(Username.getText())){
             Toast.makeText(getApplicationContext(), "Empty Username!", Toast.LENGTH_SHORT).show();
         } else{
-            Toast.makeText(getApplicationContext(), "Signing In!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Registering!", Toast.LENGTH_SHORT).show();
         }
     }
 }
