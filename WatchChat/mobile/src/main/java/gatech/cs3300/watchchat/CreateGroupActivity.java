@@ -1,5 +1,6 @@
 package gatech.cs3300.watchchat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ public class CreateGroupActivity extends ActionBarActivity {
     private EditText mGroupNameTextField;
     private Button mCreateGroupButton;
     private ProgressBar mCreateGroupActivityIndicator;
+    APIController apiController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,9 @@ public class CreateGroupActivity extends ActionBarActivity {
 
     private void performCreateGroup(String groupName) {
         mCreateGroupActivityIndicator.setVisibility(View.VISIBLE);
+        apiController = new APIController();
+        apiController.createGroup(groupName);
+        startActivity(new Intent(this, GroupsActivity.class));
     }
 
     private Boolean isGroupNameValid(String groupName) {

@@ -178,9 +178,25 @@ public class APIController extends Activity {
         return null;
     }
 
-    //*To create a group, send a POST request to /groups with the parameter groupname*//
-    public void createGroup(String groupname) {
-        //TODO complete
+    //*To create a group, send a POST request to /groups/create with the parameter groupname*//
+    public void createGroup(String groupName) {
+        System.out.println("Add group");
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("groupName", groupName);
+        client.post(API_ROOT + "/groups/create", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String response = new String(responseBody);
+                System.out.println(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
+                                  Throwable error) {
+                error.printStackTrace(System.out);
+            }
+        });
     }
 
     public void addUserToGroup(String groupname) {
