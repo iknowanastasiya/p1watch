@@ -26,9 +26,11 @@
     <string name="confirm_leave_group_message">Are you sure you want to leave the group?</string>
     <string name="title_activity_groups">Groups</string>
 
-    <!--Groups Activity-->
+    <!-- Groups Activity -->
     <string name="logout">Logout</string>
     <string name="create_group">Create Group</string>
-    <string name="title_activity_group">GroupActivity</string>
+
+    <!-- Group Activity -->
+    <string name="title_activity_group">Group</string>
 
 </resources>
