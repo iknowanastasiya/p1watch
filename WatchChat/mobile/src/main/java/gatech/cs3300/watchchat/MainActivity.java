@@ -10,8 +10,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+
 public class MainActivity extends Activity {
 
+    APIController apiController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +35,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        startActivity(new Intent(this, GroupActivity.class));
+      //  startActivity(new Intent(this, GroupActivity.class));
     }
 
     public void attemptSignIn(){
@@ -42,16 +44,24 @@ public class MainActivity extends Activity {
             Toast.makeText(getApplicationContext(), "Empty Username!", Toast.LENGTH_SHORT).show();
         } else{
             Toast.makeText(getApplicationContext(), "Signing In!", Toast.LENGTH_SHORT).show();
+            apiController = new APIController();
+            apiController.authenticateUser(Username.getText().toString());
+           //Toast.makeText(getApplicationContext(), "Signing In!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, GroupsActivity.class));
         }
     }
 
     public void attemptRegister(){
         EditText Username = (EditText) findViewById(R.id.Username);
+        System.out.println("userID "+ Username.getText().toString());
         if(TextUtils.isEmpty(Username.getText())){
             Toast.makeText(getApplicationContext(), "Empty Username!", Toast.LENGTH_SHORT).show();
         } else{
             Toast.makeText(getApplicationContext(), "Registering!", Toast.LENGTH_SHORT).show();
+            apiController = new APIController();
+            apiController.createUser(Username.getText().toString());
+            //Toast.makeText(getApplicationContext(), "Registering!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 }
