@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Watch Chat</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
@@ -29,8 +28,5 @@
     <!-- Groups Activity -->
     <string name="logout">Logout</string>
     <string name="create_group">Create Group</string>
-
-    <!-- Group Activity -->
     <string name="title_activity_group">Group</string>
-
 </resources>
