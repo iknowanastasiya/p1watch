@@ -8,6 +8,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
+
+import java.net.URL;
 
 public class CreateGroupActivity extends ActionBarActivity {
 
@@ -52,12 +63,62 @@ public class CreateGroupActivity extends ActionBarActivity {
 
     private void performCreateGroup(String groupName) {
         mCreateGroupActivityIndicator.setVisibility(View.VISIBLE);
-        apiController = new APIController();
-        apiController.createGroup(groupName);
-        startActivity(new Intent(this, GroupsActivity.class));
+        //apiController = new APIController();
+        //apiController.createGroup(groupName);
+
+        //startActivity(new Intent(this, GroupsActivity.class));
+        EditText mGroupNameTextField = (EditText) findViewById(R.id.group_name_text_field);
+        if (TextUtils.isEmpty(mGroupNameTextField.getText())) {
+            Toast.makeText(getApplicationContext(), "Empty Username!", Toast.LENGTH_SHORT).show();
+        } else {
+            final Intent intent = new Intent(this, GroupsActivity.class);
+            final String groupname = mGroupNameTextField.getText().toString();
+            System.out.println(groupname);
+            AsyncHttpClient client = new AsyncHttpClient();
+            RequestParams params = new RequestParams();
+            params.put("groupname", groupname);
+            try {
+                URL url = new URL(new String("http://cs3300.elasticbeanstalk.com" + "/groups/create"));
+                client.post(url.toString(), params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        try {
+                            JSONObject response = new JSONObject(new String(responseBody));
+                            System.out.println(response);
+                            Log.d("groupId", response.getString("groupId"));
+                          //  int createdGroupId = response.getInt("groupId");
+                           // System.out.println(createdGroupId);
+                            startGroupActivity(response.getString("groupName"), response.getString("groupId"));
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "Parsing Error!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
+                                          Throwable error) {
+                        Log.e("Create Group", error.getLocalizedMessage());
+                        //error.printStackTrace(System.out);
+                        Toast.makeText(getApplicationContext(), "Network Error!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private Boolean isGroupNameValid(String groupName) {
         return !TextUtils.isEmpty(groupName);
     }
+
+    public void startGroupActivity(String groupname, String groupId) {
+        Intent intent = new Intent(this, GroupActivity.class);
+        intent.putExtra("groupId", groupId)
+                .putExtra("groupName", groupname);
+        startActivity(intent);
+    }
 }
+
