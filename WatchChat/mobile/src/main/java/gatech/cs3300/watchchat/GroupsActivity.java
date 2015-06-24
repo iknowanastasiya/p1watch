@@ -1,12 +1,21 @@
 package gatech.cs3300.watchchat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -18,9 +27,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 public class GroupsActivity extends AppCompatActivity {
 
@@ -39,6 +50,15 @@ public class GroupsActivity extends AppCompatActivity {
 
         groups = new ArrayList<>(100);
         fetchGroupsFromAPI();
+
+        ListView listView = (ListView) findViewById(R.id.GroupList);
+        listView.setAdapter(new SimpleArrayAdapter());
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                groupClicked(groups.get(position));
+            }
+        });
     }
 
     @Override
@@ -117,5 +137,46 @@ public class GroupsActivity extends AppCompatActivity {
         }
 
         Collections.sort(groups);
+    }
+
+    private void groupClicked(Group g){
+        g.viewedUnreadMessages();
+        Intent intent = new Intent(this, GroupActivity.class);
+        intent.putExtra("Group", g);
+    }
+
+    private class SimpleArrayAdapter extends ArrayAdapter<Group>{
+
+        public SimpleArrayAdapter(){
+            super(getApplicationContext(), -1, groups);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View rowView = inflater.inflate(R.layout.group_list_item, parent, false);
+            TextView groupNameView = (TextView) rowView.findViewById(R.id.GroupNameText);
+            TextView dateView = (TextView) rowView.findViewById(R.id.DateText);
+
+            Group g = groups.get(position);
+
+            if(g.areThereUnreadMessages()) {
+                groupNameView.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                dateView.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            }
+            else {
+                groupNameView.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+                dateView.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
+            }
+
+            if(g.getMostRecentMessage().date != null) {
+                Date d = g.getMostRecentMessage().date;
+
+                String dateString = new SimpleDateFormat("MM-dd-yyyy").format(d);
+                dateView.setText(dateString);
+            }
+            return rowView;
+        }
     }
 }

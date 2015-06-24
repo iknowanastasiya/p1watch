@@ -1,5 +1,7 @@
 package gatech.cs3300.watchchat;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -16,19 +18,27 @@ import java.util.ArrayList;
 /**
  * Created by kurt on 6/24/15.
  */
-public class Group implements Comparable<Group> {
+public class Group implements Comparable<Group>, Parcelable {
 
     private String groupName, groupId;
     private ArrayList<User> groupMembers;
     private ArrayList<Message> messages;
+    private boolean hasUnreadMessages;
 
     public Group(JSONObject groupInfo){
         try{
-            groupName = groupInfo.getString("groupname");
             groupId = groupInfo.getString("groupId");
+            groupName = groupInfo.getString("groupname");
         } catch (Exception e){
             e.printStackTrace();
         }
+
+        groupMembers = new ArrayList<>();
+        messages = new ArrayList<>(300);
+
+        fetchGroupMembersFromAPI();
+        fetchMessagesFromAPI();
+        hasUnreadMessages = true;
     }
 
     public Group(String groupId, String groupName){
@@ -40,7 +50,28 @@ public class Group implements Comparable<Group> {
 
         fetchGroupMembersFromAPI();
         fetchMessagesFromAPI();
+        hasUnreadMessages = true;
     }
+
+    protected Group(Parcel in) {
+        groupName = in.readString();
+        groupId = in.readString();
+        in.readTypedList(groupMembers, User.CREATOR);
+        in.readTypedList(messages, Message.CREATOR);
+        hasUnreadMessages = in.readByte() != 0;
+    }
+
+    public static final Creator<Group> CREATOR = new Creator<Group>() {
+        @Override
+        public Group createFromParcel(Parcel in) {
+            return new Group(in);
+        }
+
+        @Override
+        public Group[] newArray(int size) {
+            return new Group[size];
+        }
+    };
 
     public Message getMostRecentMessage(){
         return messages.get(0);
@@ -57,6 +88,12 @@ public class Group implements Comparable<Group> {
     public void addMessage(Message message){
         messages.add(0,message);
     }
+
+    public void viewedUnreadMessages(){hasUnreadMessages = false;}
+
+    public void setHasUnreadMessages(){hasUnreadMessages = true;}
+
+    public boolean areThereUnreadMessages(){return hasUnreadMessages;}
 
     public void fetchMessagesFromAPI(){
         AsyncHttpClient client = new AsyncHttpClient();
@@ -147,5 +184,20 @@ public class Group implements Comparable<Group> {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(groupName);
+        dest.writeString(groupId);
+        dest.writeTypedList(groupMembers);
+        dest.writeTypedList(messages);
+        dest.writeByte((byte) (hasUnreadMessages ? 1 : 0));
+
     }
 }
