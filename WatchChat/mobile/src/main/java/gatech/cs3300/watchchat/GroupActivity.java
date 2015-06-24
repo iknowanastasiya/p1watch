@@ -5,22 +5,30 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 public class GroupActivity extends ActionBarActivity {
 
-    private class GroupMessage {
-        public String author;
-        public Date date;
-        public String content;
-        public Boolean received;
-    }
+    private ListView mMessagesList;
+    private GroupMessagesAdapter mMessagesAdapter;
+
+    private ArrayList<GroupMessage> mMessages = new ArrayList<GroupMessage>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
+
+        mMessages = new ArrayList<GroupMessage>();
+        mMessages.add(GroupMessage.received("Hello, World"));
+        mMessages.add(GroupMessage.sent("Hello, World"));
+
+        mMessagesAdapter = new GroupMessagesAdapter(getBaseContext(), mMessages);
+
+        mMessagesList = (ListView) findViewById(R.id.messages_list);
+        mMessagesList.setAdapter(mMessagesAdapter);
     }
 
     @Override
