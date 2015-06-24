@@ -41,7 +41,8 @@
         <activity
             android:name=".GroupActivity"
             android:label="@string/title_activity_group"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".GroupsActivity">
         </activity>
     </application>
 

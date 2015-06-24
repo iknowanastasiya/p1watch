@@ -2,19 +2,21 @@ package gatech.cs3300.watchchat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class GroupActivity extends ActionBarActivity {
+public class GroupActivity extends AppCompatActivity {
 
     private ListView mMessagesList;
     private GroupMessagesAdapter mMessagesAdapter;
 
     private ArrayList<GroupMessage> mMessages = new ArrayList<GroupMessage>();
+
+    private Group g;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,13 @@ public class GroupActivity extends ActionBarActivity {
 
         mMessagesList = (ListView) findViewById(R.id.messages_list);
         mMessagesList.setAdapter(mMessagesAdapter);
+
+        if(getIntent().hasExtra("Group"))
+            g = (Group)(getIntent().getParcelableExtra("Group"));
+
+        if(g != null)
+            setTitle(g.getGroupName());
+
     }
 
     @Override

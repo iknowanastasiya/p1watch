@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         try {
                             JSONObject response = new JSONObject(new String(responseBody));
-                            if(response.getString("username").equals("-1")){
+                            if(response.getString("userId").equals("-1")){
                                 Toast.makeText(getApplicationContext(), "Username does not exist!",
                                         Toast.LENGTH_SHORT).show();
                             } else{
@@ -120,10 +120,14 @@ public class MainActivity extends Activity {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
                                           Throwable error) {
-                        Log.e("Register", error.getLocalizedMessage());
-                        //error.printStackTrace(System.out);
-                        Toast.makeText(getApplicationContext(), "Network Error!",
-                                Toast.LENGTH_SHORT).show();
+                        if(statusCode == 405){
+                            Toast.makeText(getApplicationContext(), "Username already exists!",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.e("Register", error.getLocalizedMessage());
+                            Toast.makeText(getApplicationContext(), "Network Error!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             } catch(Exception e){
