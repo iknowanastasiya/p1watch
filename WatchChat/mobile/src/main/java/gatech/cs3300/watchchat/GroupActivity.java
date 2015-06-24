@@ -18,10 +18,18 @@ public class GroupActivity extends AppCompatActivity {
         public Boolean received;
     }
 
+    private Group g;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
+
+        if(getIntent().hasExtra("Group"))
+            g = (Group)(getIntent().getParcelableExtra("Group"));
+
+        if(g != null)
+            setTitle(g.getGroupName());
     }
 
     @Override

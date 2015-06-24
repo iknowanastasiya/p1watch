@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         try {
                             JSONObject response = new JSONObject(new String(responseBody));
-                            if(response.getString("username").equals("-1")){
+                            if(response.getString("userId").equals("-1")){
                                 Toast.makeText(getApplicationContext(), "Username does not exist!",
                                         Toast.LENGTH_SHORT).show();
                             } else{

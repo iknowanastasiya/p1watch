@@ -54,6 +54,9 @@ public class Group implements Comparable<Group>, Parcelable {
     }
 
     protected Group(Parcel in) {
+        groupMembers = new ArrayList<>();
+        messages = new ArrayList<>(300);
+
         groupName = in.readString();
         groupId = in.readString();
         in.readTypedList(groupMembers, User.CREATOR);
@@ -74,7 +77,9 @@ public class Group implements Comparable<Group>, Parcelable {
     };
 
     public Message getMostRecentMessage(){
-        return messages.get(0);
+        if(messages != null && !messages.isEmpty())
+            return messages.get(0);
+        return null;
     }
 
     public ArrayList<Message> getMessages(){return messages;}

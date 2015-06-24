@@ -51,6 +51,9 @@ public class GroupsActivity extends AppCompatActivity {
         groups = new ArrayList<>(100);
         fetchGroupsFromAPI();
 
+        Group g = new Group("1", "KurtGroup");
+        groups.add(g);
+
         ListView listView = (ListView) findViewById(R.id.GroupList);
         listView.setAdapter(new SimpleArrayAdapter());
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -143,6 +146,7 @@ public class GroupsActivity extends AppCompatActivity {
         g.viewedUnreadMessages();
         Intent intent = new Intent(this, GroupActivity.class);
         intent.putExtra("Group", g);
+        startActivity(intent);
     }
 
     private class SimpleArrayAdapter extends ArrayAdapter<Group>{
@@ -170,7 +174,11 @@ public class GroupsActivity extends AppCompatActivity {
                 dateView.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
             }
 
-            if(g.getMostRecentMessage().date != null) {
+            if(g.getGroupName() != null){
+                groupNameView.setText(g.getGroupName());
+            }
+
+            if(g.getMostRecentMessage() != null && g.getMostRecentMessage().date != null) {
                 Date d = g.getMostRecentMessage().date;
 
                 String dateString = new SimpleDateFormat("MM-dd-yyyy").format(d);
