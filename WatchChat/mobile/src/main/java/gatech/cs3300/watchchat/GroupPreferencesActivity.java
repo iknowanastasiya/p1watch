@@ -1,15 +1,12 @@
 package gatech.cs3300.watchchat;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -22,27 +19,34 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 public class GroupPreferencesActivity extends ActionBarActivity implements AddGroupMemberDialog.AddGroupMemberDialogListener, ConfirmLeaveGroupDialog.ConfirmLeaveGroupDialogListener {
 
     // Views
     private Button mGroupAddMemberButton;
     private ListView mGroupMembersListView;
-    private Button mLeaveGroupButton;
     private ProgressBar mGroupActivityIndicator;
 
     // Adapter
-    private String[] mGroupMemberNames;
+    private ArrayList<String> mGroupMemberNames;
     private GroupMembersAdapter mGroupMemberAdapter;
 
-   private String[] testGroupNames() {
-       return new String[]{"Billy", "Susan", "Dirk"};
-    }
+    //
+    private Group mGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_preferences);
+
+        if(getIntent().hasExtra("Group")) {
+            mGroup = (Group) (getIntent().getParcelableExtra("Group"));
+        }
+
+        if(mGroup != null) {
+            setTitle(mGroup.getGroupName() + " Preferences");
+        }
 
         mGroupAddMemberButton = (Button) findViewById(R.id.group_add_member_button);
         mGroupMembersListView = (ListView) findViewById(R.id.group_members_list_view);
@@ -55,7 +59,12 @@ public class GroupPreferencesActivity extends ActionBarActivity implements AddGr
             }
         });
 
-        mGroupMemberAdapter = new GroupMembersAdapter(getApplicationContext(), testGroupNames() );
+        mGroupMemberNames = new ArrayList<String>();
+        mGroupMemberNames.add("Billy");
+        mGroupMemberNames.add("Susan");
+        mGroupMemberNames.add("Dirk");
+
+        mGroupMemberAdapter = new GroupMembersAdapter(getApplicationContext(), mGroupMemberNames);
         mGroupMembersListView.setAdapter(mGroupMemberAdapter);
 
         mGroupActivityIndicator.setVisibility(View.GONE);
@@ -81,7 +90,7 @@ public class GroupPreferencesActivity extends ActionBarActivity implements AddGr
     }
 
     private void refreshGroupMembers() {
-        mGroupMemberAdapter.setMemberNames(mGroupMemberNames);
+
     }
 
     private void addMemberDialog() {
@@ -98,7 +107,7 @@ public class GroupPreferencesActivity extends ActionBarActivity implements AddGr
 
     // Listeners
 
-    public void addGroupMemberWithName(String name) {
+    public void addGroupMemberWithName(final String name) {
         mGroupActivityIndicator.setVisibility(View.VISIBLE);
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
@@ -118,7 +127,8 @@ public class GroupPreferencesActivity extends ActionBarActivity implements AddGr
                         }
                         else {
                             Log.d("groupName", response.getString("groupName"));
-                            startGroupActivity(response.getString("groupName"), response.getString("groupId"));
+                            mGroupMemberAdapter.addMember(name);
+                            mGroupActivityIndicator.setVisibility(View.GONE);
                         }
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(), "Parsing Error!",
@@ -143,10 +153,4 @@ public class GroupPreferencesActivity extends ActionBarActivity implements AddGr
         mGroupActivityIndicator.setVisibility(View.VISIBLE);
     }
 
-    public void startGroupActivity(String username, String userId){
-        Intent intent = new Intent(this, GroupActivity.class);
-        intent.putExtra("UserId", userId)
-                .putExtra("Username", username);
-        startActivity(intent);
-    }
 }

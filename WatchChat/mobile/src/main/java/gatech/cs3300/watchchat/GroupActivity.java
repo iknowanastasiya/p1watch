@@ -74,7 +74,9 @@ public class GroupActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.GroupPreferencesButton) {
-            startActivity(new Intent(this, GroupPreferencesActivity.class));
+            Intent intent = new Intent(this, GroupPreferencesActivity.class);
+            intent.putExtra("Group", g);
+            startActivity(intent);
             return true;
         }
 

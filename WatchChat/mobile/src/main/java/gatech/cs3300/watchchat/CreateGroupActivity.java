@@ -2,14 +2,13 @@ package gatech.cs3300.watchchat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -117,8 +116,7 @@ public class CreateGroupActivity extends AppCompatActivity {
 
     public void startGroupActivity(String groupname, String groupId) {
         Intent intent = new Intent(this, GroupActivity.class);
-        intent.putExtra("groupId", groupId)
-                .putExtra("groupName", groupname);
+        intent.putExtra("Group", new Group(groupId, groupname));
         startActivity(intent);
     }
 }
