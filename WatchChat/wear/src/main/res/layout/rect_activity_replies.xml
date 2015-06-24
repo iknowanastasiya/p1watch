@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="gatech.cs3300.watchchat.replies"
+    tools:deviceIds="wear_round">
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yes"
+        android:id="@+id/reply1Yes"
+        android:layout_above="@+id/reply5NoPhone"
+        android:layout_toStartOf="@+id/returnButton" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No"
+        android:id="@+id/reply2No"
+        android:layout_toEndOf="@+id/reply3Maybe"
+        android:layout_alignTop="@+id/reply3Maybe"
+        android:layout_above="@+id/reply5NoPhone" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Maybe"
+        android:id="@+id/reply3Maybe"
+        android:layout_alignTop="@+id/reply1Yes"
+        android:layout_toEndOf="@+id/reply1Yes" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I can&apos;t answer my phone right now"
+        android:id="@+id/reply5NoPhone"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/returnButton"
+        android:layout_below="@+id/reply5NoPhone"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
