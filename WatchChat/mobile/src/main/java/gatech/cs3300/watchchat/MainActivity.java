@@ -43,6 +43,8 @@ public class MainActivity extends Activity {
             }
         });
 
+        //Intent intent = new Intent(this, GroupActivity.class);
+        //startActivity(intent);
     }
 
     public void attemptSignIn(){

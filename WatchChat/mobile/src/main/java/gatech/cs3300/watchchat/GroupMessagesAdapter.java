@@ -15,7 +15,12 @@ public class GroupMessagesAdapter extends BaseAdapter {
     public GroupMessagesAdapter(Context context, ArrayList<Message> values) {
         super();
         mContext = context;
-        this.values = values;
+        this.values = new ArrayList<Message>(values);
+    }
+
+    public void addMessage(Message m) {
+        values.add(m);
+        notifyDataSetInvalidated();
     }
 
     @Override

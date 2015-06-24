@@ -59,6 +59,10 @@ public class Message implements Comparable<Message>, Parcelable{
     };
 
     public String getAuthorFromGroupMembers(){
+        if (group == null) {
+            return "";
+        }
+
         int index = group.getGroupMembers().indexOf(new User("", senderId));
         if(index != -1)
             return group.getGroupMembers().get(index).userName;

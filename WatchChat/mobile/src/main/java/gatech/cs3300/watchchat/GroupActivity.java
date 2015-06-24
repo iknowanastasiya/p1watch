@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -14,6 +17,8 @@ public class GroupActivity extends AppCompatActivity {
 
     private ListView mMessagesList;
     private GroupMessagesAdapter mMessagesAdapter;
+    private EditText mComposeView;
+    private Button mPostButton;
 
     private ArrayList<Message> mMessages = new ArrayList<>();
 
@@ -26,18 +31,37 @@ public class GroupActivity extends AppCompatActivity {
 
         mMessages = new ArrayList<>();
         mMessagesList = (ListView) findViewById(R.id.messages_list);
+        mPostButton = (Button) findViewById(R.id.post_button);
+        mComposeView = (EditText) findViewById(R.id.message_text_field);
 
-        if(getIntent().hasExtra("Group"))
-            g = (Group)(getIntent().getParcelableExtra("Group"));
+        if(getIntent().hasExtra("Group")) {
+            g = (Group) (getIntent().getParcelableExtra("Group"));
+        }
 
-        if(g != null)
+        if(g != null) {
             setTitle(g.getGroupName());
+        }
 
         mMessagesAdapter = new GroupMessagesAdapter(getBaseContext(), mMessages);
-        mMessages.add(new Message("hello", "tom", new Date(), g));
-        mMessages.add(new Message("hello", "tom", new Date(), g));
+        Message m = new Message("hello", "tom", new Date(), g);
+        m.received = true;
+        mMessages.add(m);
         mMessagesList.setAdapter(mMessagesAdapter);
 
+        mPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                post();
+            }
+        });
+
+    }
+
+    private void post() {
+        String text = mComposeView.getText().toString();
+        Message m = new Message(text, "me", new Date(), g);
+        m.received = false;
+        mMessagesAdapter.addMessage(m);
     }
 
     @Override
