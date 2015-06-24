@@ -3,6 +3,7 @@ package gatech.cs3300.watchchat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +21,7 @@ import org.json.JSONObject;
 
 import java.net.URL;
 
-public class CreateGroupActivity extends ActionBarActivity {
+public class CreateGroupActivity extends AppCompatActivity {
 
     // Views
     private EditText mGroupNameTextField;
