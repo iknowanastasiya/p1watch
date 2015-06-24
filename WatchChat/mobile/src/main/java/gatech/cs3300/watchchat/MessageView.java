@@ -16,7 +16,7 @@ public class MessageView extends ViewGroup {
     private ImageView mAvatar;
     private TextView mAuthor;
 
-    private GroupMessage mMessage;
+    private Message mMessage;
 
     // Initializer
     public MessageView(Context context) {
@@ -51,7 +51,7 @@ public class MessageView extends ViewGroup {
     }
 
     // Properties
-    public void setMessage(GroupMessage message) {
+    public void setMessage(Message message) {
         mMessage = message;
 
         mAvatar.setBackgroundColor(0xff000000);

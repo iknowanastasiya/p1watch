@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public class GroupMessagesAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<GroupMessage> values;
+    private ArrayList<Message> values;
 
-    public GroupMessagesAdapter(Context context, ArrayList<GroupMessage> values) {
+    public GroupMessagesAdapter(Context context, ArrayList<Message> values) {
         super();
         mContext = context;
         this.values = values;

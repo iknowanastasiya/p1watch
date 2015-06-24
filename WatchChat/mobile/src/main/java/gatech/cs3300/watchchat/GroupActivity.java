@@ -8,13 +8,14 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class GroupActivity extends AppCompatActivity {
 
     private ListView mMessagesList;
     private GroupMessagesAdapter mMessagesAdapter;
 
-    private ArrayList<GroupMessage> mMessages = new ArrayList<GroupMessage>();
+    private ArrayList<Message> mMessages = new ArrayList<>();
 
     private Group g;
 
@@ -23,20 +24,19 @@ public class GroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-        mMessages = new ArrayList<GroupMessage>();
-        mMessages.add(GroupMessage.received("Hello, World"));
-        mMessages.add(GroupMessage.sent("Hello, World"));
-
-        mMessagesAdapter = new GroupMessagesAdapter(getBaseContext(), mMessages);
-
+        mMessages = new ArrayList<>();
         mMessagesList = (ListView) findViewById(R.id.messages_list);
-        mMessagesList.setAdapter(mMessagesAdapter);
 
         if(getIntent().hasExtra("Group"))
             g = (Group)(getIntent().getParcelableExtra("Group"));
 
         if(g != null)
             setTitle(g.getGroupName());
+
+        mMessagesAdapter = new GroupMessagesAdapter(getBaseContext(), mMessages);
+        mMessages.add(new Message("hello", "tom", new Date(), g));
+        mMessages.add(new Message("hello", "tom", new Date(), g));
+        mMessagesList.setAdapter(mMessagesAdapter);
 
     }
 
