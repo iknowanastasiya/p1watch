@@ -42,10 +42,20 @@ public class GroupActivity extends AppCompatActivity {
             setTitle(g.getGroupName());
         }
 
-        mMessagesAdapter = new GroupMessagesAdapter(getBaseContext(), mMessages);
-        Message m = new Message("hello", "tom", new Date(), g);
+        Message m = new Message("hi", "tom", new Date(), g);
         m.received = true;
         mMessages.add(m);
+        m = new Message("whats up", "tom", new Date(), g);
+        m.received = false;
+        mMessages.add(m);
+        m = new Message("nm", "tom", new Date(), g);
+        m.received = true;
+        mMessages.add(m);
+        m = new Message("k", "tom", new Date(), g);
+        m.received = false;
+        mMessages.add(m);
+        mMessagesAdapter = new GroupMessagesAdapter(getBaseContext(), mMessages);
+
         mMessagesList.setAdapter(mMessagesAdapter);
         mMessagesList.setDivider(null);
 

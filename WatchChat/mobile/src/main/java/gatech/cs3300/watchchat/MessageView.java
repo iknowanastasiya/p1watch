@@ -56,7 +56,7 @@ public class MessageView extends FrameLayout {
         t = 0;
         b = getMeasuredHeight();
         r = getMeasuredWidth();
-        
+
         if (mMessage.received) {
             mAvatar.layout(l + padding, b - (avatarWidth + padding), l + padding + avatarWidth, b - padding);
             mContentView.layout(l + 2 * padding + avatarWidth, t + padding, r - padding, b - padding);
