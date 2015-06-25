@@ -47,6 +47,7 @@ public class GroupActivity extends AppCompatActivity {
         m.received = true;
         mMessages.add(m);
         mMessagesList.setAdapter(mMessagesAdapter);
+        mMessagesList.setDivider(null);
 
         mPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
