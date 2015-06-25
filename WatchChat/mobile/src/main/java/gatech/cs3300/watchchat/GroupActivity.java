@@ -76,7 +76,6 @@ public class GroupActivity extends AppCompatActivity {
         });
 
         if(RemoteInput.getResultsFromIntent(getIntent()) != null){
-
             post(RemoteInput.getResultsFromIntent(getIntent()).getCharSequence(EXTRA_VOICE_REPLY).toString());
         }
     }
@@ -85,7 +84,6 @@ public class GroupActivity extends AppCompatActivity {
         Message m = new Message(text, "me", new Date(), g);
         m.received = false;
         mMessagesAdapter.addMessage(m);
-        mMessagesAdapter.notifyDataSetChanged();
     }
 
     private void post() {
@@ -94,7 +92,6 @@ public class GroupActivity extends AppCompatActivity {
         mComposeView.setText("");
         m.received = false;
         mMessagesAdapter.addMessage(m);
-        mMessagesAdapter.notifyDataSetChanged();
         makeTestNotification(text);
     }
 

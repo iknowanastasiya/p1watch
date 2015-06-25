@@ -20,7 +20,7 @@ public class GroupMessagesAdapter extends BaseAdapter {
 
     public void addMessage(Message m) {
         values.add(m);
-        notifyDataSetInvalidated();
+        notifyDataSetChanged();
     }
 
     @Override
