@@ -56,6 +56,9 @@ public class MainActivity extends Activity {
                 attemptRegister();
             }
         });
+
+        //Intent intent = new Intent(this, GroupActivity.class);
+        //startActivity(intent);
     }
 
     @Override
