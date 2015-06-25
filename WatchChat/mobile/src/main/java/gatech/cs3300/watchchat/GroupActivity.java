@@ -76,6 +76,7 @@ public class GroupActivity extends AppCompatActivity {
     private void post() {
         String text = mComposeView.getText().toString();
         Message m = new Message(text, "me", new Date(), g);
+        mComposeView.setText("");
         m.received = false;
         mMessagesAdapter.addMessage(m);
         makeTestNotification(text);
