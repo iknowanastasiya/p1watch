@@ -28,7 +28,7 @@ public class Group implements Comparable<Group>, Parcelable {
     public Group(JSONObject groupInfo){
         try{
             groupId = groupInfo.getString("groupId");
-            groupName = groupInfo.getString("groupname");
+            groupName = groupInfo.getString("groupName");
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -154,13 +154,15 @@ public class Group implements Comparable<Group>, Parcelable {
     public int compareTo(Group another) {
         if(equals(another))
             return 0;
-        else
+        else if(getMostRecentMessage() != null && another.getMostRecentMessage() != null)
             return another.getMostRecentMessage().compareTo(getMostRecentMessage());
+        else
+            return 1;
     }
 
     public boolean equals(Object another){
         if(another instanceof Group) {
-            return ((Group)another).groupId.equals(groupName);
+            return ((Group)another).groupId.equals(groupId);
         } else {
             return false;
         }

@@ -2,6 +2,7 @@ package gatech.cs3300.watchchat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -35,24 +36,29 @@ import java.util.Date;
 
 public class GroupsActivity extends AppCompatActivity {
 
+    private User currentUser;
     private String username, userid;
     private ArrayList<Group> groups;
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups);
 
-        if(getIntent().hasExtra("username"))
-            username = getIntent().getStringExtra("Username");
-        if(getIntent().hasExtra("userId"))
-            userid = getIntent().getStringExtra("UserId");
+        if(getIntent().hasExtra("user")){
+            currentUser = getIntent().getParcelableExtra("user");
+            userid = currentUser.userId;
+            username = currentUser.userName;
+        } else {
+            mPrefs = getSharedPreferences("WATCHCHAT", MODE_PRIVATE);
+            if (mPrefs != null && !mPrefs.getString("UserName", "").equals("")) {
+                username = mPrefs.getString("UserName", "");
+                userid = mPrefs.getString("UserId", "");
+            }
+        }
 
         groups = new ArrayList<>(100);
-        fetchGroupsFromAPI();
-
-        Group g = new Group("1", "KurtGroup");
-        groups.add(g);
 
         ListView listView = (ListView) findViewById(R.id.GroupList);
         listView.setAdapter(new SimpleArrayAdapter());
@@ -65,8 +71,8 @@ public class GroupsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
-        super.onResume();
+    protected void onStart(){
+        super.onStart();
         fetchGroupsFromAPI();
     }
 
@@ -93,23 +99,24 @@ public class GroupsActivity extends AppCompatActivity {
     }
 
     public void logout(){
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, MainActivity.class).putExtra("Logout",true));
     }
 
     public void createGroup(){
-        startActivity(new Intent(this, CreateGroupActivity.class));
+        startActivity(new Intent(this, CreateGroupActivity.class).putExtra("User", currentUser));
     }
 
     public void fetchGroupsFromAPI(){
         AsyncHttpClient client = new AsyncHttpClient();
         try{
-            URL url = new URL(new String("http://cs3300.elasticbeanstalk.com" + "/users/" + userid + "/groups"));
+            URL url = new URL(new String("http://cs3300.elasticbeanstalk.com/users/"+userid+"/groups" ));
             client.get(url.toString(), new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     try {
                         parseGroups(new JSONArray(new String(responseBody)));
                     } catch (Exception e) {
+                        e.printStackTrace();
                         Toast.makeText(getApplicationContext(), "Parsing Error!",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -140,6 +147,8 @@ public class GroupsActivity extends AppCompatActivity {
         }
 
         Collections.sort(groups);
+        ListView listView = (ListView) findViewById(R.id.GroupList);
+        ((ArrayAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
     private void groupClicked(Group g){
@@ -164,15 +173,6 @@ public class GroupsActivity extends AppCompatActivity {
             TextView dateView = (TextView) rowView.findViewById(R.id.DateText);
 
             Group g = groups.get(position);
-
-            if(g.areThereUnreadMessages()) {
-                groupNameView.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-                dateView.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            }
-            else {
-                groupNameView.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
-                dateView.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
-            }
 
             if(g.getGroupName() != null){
                 groupNameView.setText(g.getGroupName());
