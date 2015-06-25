@@ -171,7 +171,7 @@ public class Group implements Comparable<Group>, Parcelable {
     private void parseMessages(JSONArray response){
         for(int i = 0; i < response.length(); i++) {
             try {
-                Message message = new Message(response.getJSONObject(i), this);
+                Message message = new Message(response.getJSONObject(i), groupId);
                 if (!messages.contains(message))
                     messages.add(0, message);
             } catch (Exception e) {

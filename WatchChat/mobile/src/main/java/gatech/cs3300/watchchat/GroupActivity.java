@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.RemoteInput;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,8 @@ public class GroupActivity extends AppCompatActivity {
     private ArrayList<Message> mMessages = new ArrayList<>();
 
     private Group g;
+    private User currentUser;
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,22 +50,32 @@ public class GroupActivity extends AppCompatActivity {
             g = getIntent().getParcelableExtra("Group");
         }
 
+        mPrefs = getSharedPreferences("WATCHCHAT", MODE_PRIVATE);
+        if (mPrefs != null && !mPrefs.getString("UserName", "").equals("")) {
+            currentUser = new User(mPrefs.getString("UserName", ""), mPrefs.getString("UserId", ""));
+        }
+
         if(g != null) {
             setTitle(g.getGroupName());
         }
 
-        Message m = new Message("hi", "tom", new Date(), g);
-        m.received = true;
-        mMessages.add(m);
-        m = new Message("whats up", "tom", new Date(), g);
-        m.received = false;
-        mMessages.add(m);
-        m = new Message("nm", "tom", new Date(), g);
-        m.received = true;
-        mMessages.add(m);
-        m = new Message("k", "tom", new Date(), g);
-        m.received = false;
-        mMessages.add(m);
+        if(getIntent().hasExtra("Messages")){
+            mMessages = getIntent().getParcelableArrayListExtra("Messages");
+        } else {
+
+            Message m = new Message("hi", "tom", new Date(), g.getGroupId());
+            m.received = true;
+            mMessages.add(m);
+            m = new Message("whats up", currentUser.userId, new Date(), g.getGroupId());
+            m.received = false;
+            mMessages.add(m);
+            m = new Message("nm", "tom", new Date(), g.getGroupId());
+            m.received = true;
+            mMessages.add(m);
+            m = new Message("k", currentUser.userId, new Date(), g.getGroupId());
+            m.received = false;
+            mMessages.add(m);
+        }
         mMessagesAdapter = new GroupMessagesAdapter(getBaseContext(), mMessages);
 
         mMessagesList.setAdapter(mMessagesAdapter);
@@ -80,17 +93,28 @@ public class GroupActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+        mPrefs = getSharedPreferences("WATCHCHAT", MODE_PRIVATE);
+        if (mPrefs != null && !mPrefs.getString("UserName", "").equals("")) {
+            currentUser = new User(mPrefs.getString("UserName", ""), mPrefs.getString("UserId", ""));
+        }
+    }
+
     private void post(String text){
-        Message m = new Message(text, "me", new Date(), g);
-        m.received = false;
+        Message m = new Message(text, "tom", new Date(), g.getGroupId());
+        m.received = true;
+        mMessages.add(m);
         mMessagesAdapter.addMessage(m);
     }
 
     private void post() {
         String text = mComposeView.getText().toString();
-        Message m = new Message(text, "me", new Date(), g);
+        Message m = new Message(text, currentUser.userId, new Date(), g.getGroupId());
         mComposeView.setText("");
         m.received = false;
+        mMessages.add(m);
         mMessagesAdapter.addMessage(m);
         makeTestNotification(text);
     }
@@ -116,7 +140,8 @@ public class GroupActivity extends AppCompatActivity {
 
     public void makeTestNotification(String text){
         // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(this, GroupActivity.class).putExtra("Group", g);
+        Intent resultIntent = new Intent(this, GroupActivity.class).putExtra("Group", g)
+                .putParcelableArrayListExtra("Messages", mMessages);
 
         // The stack builder object will contain an artificial back stack for the
         // started Activity.

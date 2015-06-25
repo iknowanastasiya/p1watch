@@ -72,6 +72,11 @@ public class GroupsActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
+        mPrefs = getSharedPreferences("WATCHCHAT", MODE_PRIVATE);
+        if (mPrefs != null && !mPrefs.getString("UserName", "").equals("")) {
+            username = mPrefs.getString("UserName", "");
+            userid = mPrefs.getString("UserId", "");
+        }
         fetchGroupsFromAPI();
     }
 
@@ -154,6 +159,7 @@ public class GroupsActivity extends AppCompatActivity {
         g.viewedUnreadMessages();
         Intent intent = new Intent(this, GroupActivity.class);
         intent.putExtra("Group", g);
+        intent.putExtra("CurrentUser", currentUser);
         startActivity(intent);
     }
 

@@ -3,35 +3,34 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by kurt on 6/24/15.
  */
 public class Message implements Comparable<Message>, Parcelable{
-    public String messageId, senderId;
-    public String author;
+    public String messageId, senderId, groupId;
     public Date date;
     public String content;
     public Boolean received;
-    public Group group;
 
-    public Message(String content, String senderId, Date date, Group group){
+    public Message(String content, String senderId, Date date, String groupId){
         this.content = content;
         this.senderId = senderId;
         this.date = date;
-        this.group = group;
-        author = getAuthorFromGroupMembers();
+        this.groupId = groupId;
     }
 
-    public Message(JSONObject message, Group group){
+    public Message(JSONObject message, String groupId){
         try{
             messageId = message.getString("messageId");
             senderId = message.getString("senderId");
             date = new Date(message.getLong("dateCreated"));
             content = message.getString("content");
-            this.group = group;
-            author = getAuthorFromGroupMembers();
+            groupId = message.getString("groupId");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -41,9 +40,10 @@ public class Message implements Comparable<Message>, Parcelable{
     protected Message(Parcel in) {
         messageId = in.readString();
         senderId = in.readString();
-        author = in.readString();
         content = in.readString();
-        group = in.readParcelable(Group.class.getClassLoader());
+        date = new Date(in.readLong());
+        groupId = in.readString();
+        received = in.readByte() != 0;
     }
 
     public static final Creator<Message> CREATOR = new Creator<Message>() {
@@ -57,18 +57,6 @@ public class Message implements Comparable<Message>, Parcelable{
             return new Message[size];
         }
     };
-
-    public String getAuthorFromGroupMembers(){
-        if (group == null) {
-            return "";
-        }
-
-        int index = group.getGroupMembers().indexOf(new User("", senderId));
-        if(index != -1)
-            return group.getGroupMembers().get(index).userName;
-        else
-            return "";
-    }
 
     @Override
     public int compareTo(Message another) {
@@ -91,8 +79,9 @@ public class Message implements Comparable<Message>, Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(messageId);
         dest.writeString(senderId);
-        dest.writeString(author);
         dest.writeString(content);
-        dest.writeParcelable(group, flags);
+        dest.writeLong(date.getTime());
+        dest.writeString(groupId);
+        dest.writeByte((byte) (received ? 1 : 0));
     }
 }
