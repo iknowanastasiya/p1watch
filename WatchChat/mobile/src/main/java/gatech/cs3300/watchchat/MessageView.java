@@ -40,14 +40,22 @@ public class MessageView extends FrameLayout {
         addView(mAvatar);
     }
 
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        //super.onLayout(changed, l, t, r, b);
+
         if (mMessage == null) {
             return;
         }
         int avatarWidth = 100;
 
         int padding = Math.max(getPaddingLeft(), 10);
+
+        l = 0;
+        t = 0;
+        b = getMeasuredHeight();
+        r = getMeasuredWidth();
 
         if (mMessage.received) {
             mAvatar.layout(l + padding, b - (avatarWidth + padding), l + padding + avatarWidth, b - padding);
@@ -57,6 +65,7 @@ public class MessageView extends FrameLayout {
             mAvatar.layout(r - (avatarWidth + padding), b - (avatarWidth + padding), r - padding, b - padding);
         }
     }
+
 
     // Properties
     public void setMessage(Message message) {
