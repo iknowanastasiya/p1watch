@@ -26,6 +26,8 @@ public class ReplyActivity extends Activity implements WearableListView.ClickLis
         listItems = new ArrayList();
         listItems.add("Yes");
         listItems.add("No");
+        listItems.add("Maybe");
+        listItems.add("Hey!");
         listItems.add("Just a second.");
         listItems.add("Sorry, I'm driving.");
         listItems.add("What?");

@@ -29,4 +29,15 @@
     <string name="logout">Logout</string>
     <string name="create_group">Create Group</string>
     <string name="title_activity_group">Group</string>
+
+    <!-- Watch Predefined Replies-->
+    <string-array name="reply_choices">
+        <item>Yes</item>
+        <item>No</item>
+        <item>Maybe</item>
+        <item>Hey!</item>
+        <item>Just a second.</item>
+        <item>Sorry, I\'m driving.</item>
+        <item>What?</item>
+    </string-array>
 </resources>

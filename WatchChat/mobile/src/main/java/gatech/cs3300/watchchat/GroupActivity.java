@@ -1,11 +1,13 @@
 package gatech.cs3300.watchchat;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.RemoteInput;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.view.Menu;
@@ -24,6 +26,8 @@ public class GroupActivity extends AppCompatActivity {
     private GroupMessagesAdapter mMessagesAdapter;
     private EditText mComposeView;
     private Button mPostButton;
+    // Key for the string that's delivered in the action's intent
+    private static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
 
     private ArrayList<Message> mMessages = new ArrayList<>();
 
@@ -71,6 +75,17 @@ public class GroupActivity extends AppCompatActivity {
             }
         });
 
+        if(RemoteInput.getResultsFromIntent(getIntent()) != null){
+
+            post(RemoteInput.getResultsFromIntent(getIntent()).getCharSequence(EXTRA_VOICE_REPLY).toString());
+        }
+    }
+
+    private void post(String text){
+        Message m = new Message(text, "me", new Date(), g);
+        m.received = false;
+        mMessagesAdapter.addMessage(m);
+        mMessagesAdapter.notifyDataSetChanged();
     }
 
     private void post() {
@@ -79,6 +94,7 @@ public class GroupActivity extends AppCompatActivity {
         mComposeView.setText("");
         m.received = false;
         mMessagesAdapter.addMessage(m);
+        mMessagesAdapter.notifyDataSetChanged();
         makeTestNotification(text);
     }
 
@@ -102,12 +118,6 @@ public class GroupActivity extends AppCompatActivity {
     }
 
     public void makeTestNotification(String text){
-        NotificationCompat.Builder mBuilder =
-                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_user_white)
-                        .setContentTitle(g.getGroupName())
-                        .setContentText(text)
-                        .setAutoCancel(true);
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this, GroupActivity.class).putExtra("Group", g);
 
@@ -123,8 +133,25 @@ public class GroupActivity extends AppCompatActivity {
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
                         0,
-                        PendingIntent.FLAG_CANCEL_CURRENT
+                        PendingIntent.FLAG_UPDATE_CURRENT
                 );
+        RemoteInput remoteInput = new RemoteInput.Builder(EXTRA_VOICE_REPLY)
+                .setLabel("Reply...")
+                .setChoices(getResources().getStringArray(R.array.reply_choices))
+                .build();
+        NotificationCompat.Action action  =
+                new NotificationCompat.Action.Builder(R.drawable.ic_reply_white_24dp, "Reply", resultPendingIntent)
+                .addRemoteInput(remoteInput)
+                .build();
+
+        NotificationCompat.Builder mBuilder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_user_white)
+                        .setContentTitle(g.getGroupName())
+                        .setContentText(text)
+                        .setAutoCancel(true)
+                        .extend(new NotificationCompat.WearableExtender().addAction(action));
+
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
