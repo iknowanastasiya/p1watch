@@ -9,8 +9,13 @@ import java.util.ArrayList;
 
 public class GroupMessagesAdapter extends BaseAdapter {
 
+    public interface GroupMessagesListener {
+        public void openURL(String url);
+    }
+
     private Context mContext;
     private ArrayList<Message> values;
+    private GroupMessagesListener mListener;
 
     public GroupMessagesAdapter(Context context, ArrayList<Message> values) {
         super();
@@ -21,6 +26,10 @@ public class GroupMessagesAdapter extends BaseAdapter {
     public void addMessage(Message m) {
         values.add(m);
         notifyDataSetChanged();
+    }
+
+    public void setListener(GroupMessagesListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -44,7 +53,16 @@ public class GroupMessagesAdapter extends BaseAdapter {
             view = new MessageView(mContext);
         }
 
-        view.setMessage(values.get(position));
+        final Message message = values.get(position);
+        view.setMessage(message);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (message.documentURL != null && mListener != null) {
+                    mListener.openURL(message.documentURL);
+                }
+            }
+        });
 
         return view;
     }

@@ -40,4 +40,5 @@
         <item>Sorry, I\'m driving.</item>
         <item>What?</item>
     </string-array>
+    <string name="title_activity_document">DocumentActivity</string>
 </resources>

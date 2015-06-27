@@ -4,8 +4,6 @@ import android.os.Parcelable;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -16,6 +14,7 @@ public class Message implements Comparable<Message>, Parcelable{
     public Date date;
     public String content;
     public Boolean received;
+    public String documentURL;
 
     public Message(String content, String senderId, Date date, String groupId){
         this.content = content;

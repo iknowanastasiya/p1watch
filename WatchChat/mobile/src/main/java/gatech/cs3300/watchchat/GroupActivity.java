@@ -1,12 +1,12 @@
 package gatech.cs3300.watchchat;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.RemoteInput;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +21,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class GroupActivity extends AppCompatActivity {
+public class GroupActivity extends AppCompatActivity implements GroupMessagesAdapter.GroupMessagesListener {
 
     private ListView mMessagesList;
     private GroupMessagesAdapter mMessagesAdapter;
@@ -77,6 +77,7 @@ public class GroupActivity extends AppCompatActivity {
             mMessages.add(m);
         }
         mMessagesAdapter = new GroupMessagesAdapter(getBaseContext(), mMessages);
+        mMessagesAdapter.setListener(this);
 
         mMessagesList.setAdapter(mMessagesAdapter);
         mMessagesList.setDivider(null);
@@ -91,6 +92,12 @@ public class GroupActivity extends AppCompatActivity {
         if(RemoteInput.getResultsFromIntent(getIntent()) != null){
             post(RemoteInput.getResultsFromIntent(getIntent()).getCharSequence(EXTRA_VOICE_REPLY).toString());
         }
+    }
+
+    public void openURL(String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     @Override
